@@ -1,0 +1,130 @@
+#ext-definition-tooltip {
+  /* Light Theme Variables */
+  --ext-bg: #ffffff;
+  --ext-text: #1f2937;
+  --ext-border: #d1fae5;
+  --ext-shadow: 0 12px 48px rgba(16, 185, 129, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);
+  --ext-accent: #10b981;
+  --ext-divider: #ecfdf5;
+  --ext-pos-text: #047857;
+  --ext-pos-bg: #d1fae5;
+  --ext-def-text: #374151;
+  --ext-ex-text: #4b5563;
+  --ext-ex-border: #34d399;
+  --ext-ex-bg: #f0fdf4;
+  --ext-hint-text: #9ca3af;
+
+  position: absolute;
+  background: var(--ext-bg);
+  color: var(--ext-text);
+  padding: 16px 20px;
+  border-radius: 14px;
+  font-size: 14px;
+  z-index: 1000000;
+  max-width: 450px;
+  box-shadow: var(--ext-shadow);
+  border: 1px solid var(--ext-border);
+  pointer-events: auto; /* Required to allow hovering over the modal */
+  cursor: default;
+  font-family: "JetBrains Mono", "Cascadia Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  line-height: 1.6;
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.3s ease, border-color 0.3s ease;
+  transform: translateY(0);
+}
+
+@media (prefers-color-scheme: dark) {
+  #ext-definition-tooltip {
+    /* Dark Theme Variables */
+    --ext-bg: #18181b;
+    --ext-text: #f3f4f6;
+    --ext-border: #27272a;
+    --ext-shadow: 0 12px 48px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.3);
+    --ext-accent: #34d399;
+    --ext-divider: #27272a;
+    --ext-pos-text: #6ee7b7;
+    --ext-pos-bg: #064e3b;
+    --ext-def-text: #e5e7eb;
+    --ext-ex-text: #9ca3af;
+    --ext-ex-border: #10b981;
+    --ext-ex-bg: #134e4a;
+    --ext-hint-text: #6b7280;
+  }
+}
+
+#ext-definition-tooltip strong.word {
+  color: var(--ext-accent); /* Vibrant Emerald */
+  font-size: 18px;
+  font-weight: 700;
+  margin-right: 6px;
+  letter-spacing: -0.02em;
+}
+
+#ext-definition-tooltip .def-container {
+  margin-top: 14px;
+  border-bottom: 1px solid var(--ext-divider);
+  padding-bottom: 12px;
+}
+#ext-definition-tooltip .def-container:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+#ext-definition-tooltip .pos {
+  font-style: italic;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ext-pos-text);
+  background: var(--ext-pos-bg);
+  padding: 3px 10px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+
+#ext-definition-tooltip .def {
+  margin-top: 6px;
+  color: var(--ext-def-text);
+  font-weight: 500;
+}
+
+#ext-definition-tooltip .example {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--ext-ex-text);
+  border-left: 3px solid var(--ext-ex-border);
+  padding-left: 12px;
+  font-style: italic;
+  background: var(--ext-ex-bg);
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-radius: 0 6px 6px 0;
+}
+
+#ext-definition-tooltip .expanded-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+
+#ext-definition-tooltip:hover .expanded-content {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+#ext-definition-tooltip .hover-hint {
+  font-size: 11px;
+  color: var(--ext-hint-text);
+  text-align: right;
+  margin-top: 6px;
+  font-style: italic;
+  transition: opacity 0.2s ease;
+}
+
+#ext-definition-tooltip:hover .hover-hint {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  overflow: hidden;
+}

@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <rect width="128" height="128" rx="28" fill="#10b981"/>
+  
+  <!-- Browser Window UI Dots (Web-based metaphor) -->
+  <circle cx="22" cy="18" r="3.5" fill="#ffffff" opacity="0.4"/>
+  <circle cx="34" cy="18" r="3.5" fill="#ffffff" opacity="0.4"/>
+  <circle cx="46" cy="18" r="3.5" fill="#ffffff" opacity="0.4"/>
+
+  <!-- Highlighted Web Text -->
+  <rect x="36" y="96" width="56" height="12" rx="4" fill="#047857" opacity="0.3"/>
+  <line x1="40" y1="102" x2="88" y2="102" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.8"/>
+
+  <!-- Tooltip Bubble Tail Pointing Down -->
+  <polygon points="56,80 72,80 64,92" fill="#ffffff"/>
+
+  <!-- Tooltip Modal Body -->
+  <rect x="16" y="32" width="96" height="48" rx="10" fill="#ffffff"/>
+
+  <!-- Tooltip Inner Details (Dictionary Lookup metaphor) -->
+  <!-- Target Word -->
+  <line x1="28" y1="46" x2="52" y2="46" stroke="#10b981" stroke-width="8" stroke-linecap="round"/>
+  <!-- Definition Lines -->
+  <line x1="28" y1="60" x2="100" y2="60" stroke="#e2e8f0" stroke-width="6" stroke-linecap="round"/>
+  <line x1="28" y1="70" x2="80" y2="70" stroke="#e2e8f0" stroke-width="6" stroke-linecap="round"/>
+
+  <!-- Interactive Mouse Cursor -->
+  <polygon points="76,88 76,112 82,106 88,116 92,114 86,104 94,104" fill="#1f2937" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+</svg>
