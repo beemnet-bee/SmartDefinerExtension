@@ -138,13 +138,60 @@ function showTooltip(text, rect, contextText) {
         }
         tooltip.innerHTML = html;
       } else {
-        tooltip.innerHTML = `<strong class="word">${text}</strong><div class="def">No definition or PDF notes found.</div>`;
+        tooltip.innerHTML = `<strong class="word">${text}</strong><div class="def">Asking Gemini...</div>`;
+        fetchGeminiDefinition(text, tooltip);
       }
     })
     .catch((err) => {
         console.error(err);
         tooltip.innerHTML = `<strong class="word">${text}</strong><div class="def text-error">Error fetching definition/notes.</div>`;
     });
+}
+
+// ==========================================
+// GEMINI API FALLBACK
+// ==========================================
+async function fetchGeminiDefinition(text, tooltipElement) {
+  // Replace YOUR_GEMINI_API_KEY with the actual API key you will provide.
+  const API_KEY = 'YOUR_GEMINI_API_KEY';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+  
+  if (API_KEY === 'YOUR_GEMINI_API_KEY') {
+     tooltipElement.innerHTML = `<strong class="word">${text}</strong><div class="def">Please configure your Gemini API key in content.js to use the AI fallback.</div>`;
+     return;
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{text: `Provide a very short, concise dictionary definition (max 2 sentences) for the word or phrase: "${text}". Do not include conversational filler.`}]
+        }]
+      })
+    });
+    
+    if (!response.ok) throw new Error('Network response was not ok');
+    
+    const data = await response.json();
+    const definition = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    
+    if (definition) {
+      tooltipElement.innerHTML = `
+        <strong class="word">${text}</strong>
+        <div class="def-container">
+          <span class="pos">AI</span>
+          <div class="def">${definition.replace(/\\n/g, '<br>')}</div>
+        </div>
+      `;
+    } else {
+      tooltipElement.innerHTML = `<strong class="word">${text}</strong><div class="def">No definition found via AI either.</div>`;
+    }
+  } catch (error) {
+    console.error("Gemini API error:", error);
+    tooltipElement.innerHTML = `<strong class="word">${text}</strong><div class="def text-error">Error fetching definition from Gemini.</div>`;
+  }
 }
 
 function removeTooltip() {
