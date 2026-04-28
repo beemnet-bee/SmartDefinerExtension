@@ -38,14 +38,27 @@ function showTooltip(text, rect, contextText) {
     tooltip.style.top = `${rect.bottom + window.scrollY + 10}px`;
   }
 
-  // Fetch real definition from a free API
-  fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${text}`)
-    .then(res => res.json())
-    .then(data => {
+  // Fetch real definition from a free API & local PDF dictionary
+  Promise.all([
+    fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${text}`).then(res => res.ok ? res.json() : []).catch(() => []),
+    fetch(`http://127.0.0.1:5000/search?q=${text}`).then(res => res.ok ? res.json() : { results: [] }).catch(() => ({ results: [] }))
+  ]).then(([data, pdfData]) => {
       let topDefs = [];
+      let allDefs = [];
+      let html = `<strong class="word">${text}</strong>`;
+      
+      if (pdfData && pdfData.results && pdfData.results.length > 0) {
+        html += `<div class="pdf-results" style="margin-bottom: 12px; border-bottom: 1px solid var(--ext-border); padding-bottom: 8px;">`;
+        html += `<div style="font-size: 11px; margin-bottom: 4px; color: var(--ext-pos-text)"><strong>From your PDFs:</strong></div>`;
+        pdfData.results.forEach((res, i) => {
+           if (i > 0) html += `<div class="expanded-content">`;
+           html += `<div class="def" style="margin-bottom: 4px; font-style: italic;">"...${res.context}..."</div>`;
+           html += `<div class="example" style="font-size: 10px; color: var(--ext-hint-text); text-align: right;">- ${res.source}</div>`;
+        });
+        html += `</div>`;
+      }
       
       if (Array.isArray(data) && data.length > 0) {
-        let allDefs = [];
         // Flatten definitions with their part of speech
         data.forEach(entry => {
           entry.meanings?.forEach(m => {
@@ -87,10 +100,12 @@ function showTooltip(text, rect, contextText) {
       }
 
       if (topDefs.length > 0) {
-        let html = `<strong class="word">${text}</strong>`;
+        if (!html.includes('<strong')) {
+            html += `<strong class="word">${text}</strong>`;
+        }
         
         topDefs.forEach((defObj, index) => {
-          if (index === 1) { // Start wrapping alternative definitions
+          if (index === 1 && !html.includes('expanded-content')) { // Start wrapping alternative definitions
             html += `<div class="expanded-content">`;
           }
 
@@ -110,18 +125,42 @@ function showTooltip(text, rect, contextText) {
 
         if (topDefs.length > 1) {
           html += `</div>`; // Close expanded-content
-          html += `<div class="hover-hint">Hover for more meanings...</div>`;
+        }
+        if (topDefs.length > 1 || (pdfData && pdfData.results && pdfData.results.length > 1)) {
+          html += `<div class="hover-hint">Hover for more meanings/notes...</div>`;
         }
         
         tooltip.innerHTML = html;
+      } else if (pdfData && pdfData.results && pdfData.results.length > 0) {
+        if (pdfData.results.length > 1) {
+            html += `</div>`;
+            html += `<div class="hover-hint">Hover for more notes...</div>`;
+        }
+        tooltip.innerHTML = html;
       } else {
-        tooltip.innerHTML = `<strong class="word">${text}</strong><div class="def">No definition found.</div>`;
+        tooltip.innerHTML = `<strong class="word">${text}</strong><div class="def">No definition or PDF notes found.</div>`;
       }
     })
-    .catch(() => tooltip.innerHTML = `<strong class="word">${text}</strong><div class="def text-error">Error fetching definition.</div>`);
+    .catch((err) => {
+        console.error(err);
+        tooltip.innerHTML = `<strong class="word">${text}</strong><div class="def text-error">Error fetching definition/notes.</div>`;
+    });
 }
 
 function removeTooltip() {
   const old = document.getElementById('ext-definition-tooltip');
   if (old) old.remove();
 }
+
+// ==========================================
+// STEALTH MODE: Hide on Blur
+// ==========================================
+window.addEventListener('blur', () => {
+  removeTooltip();
+  
+  // Optionally clear the highlighted text selection as well
+  const selection = window.getSelection();
+  if (selection) {
+    selection.removeAllRanges();
+  }
+});

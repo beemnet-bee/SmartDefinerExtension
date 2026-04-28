@@ -1,0 +1,28 @@
+{
+  "name": "selection-tooltip-ext",
+  "version": "1.0.0",
+  "description": "A sleek, context-aware Chrome extension that provides instant, highly relevant dictionary definitions for any word you select on a webpage.",
+  "main": "content.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beemnet-bee/SmartDefiner.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/beemnet-bee/SmartDefiner/issues"
+  },
+  "homepage": "https://github.com/beemnet-bee/SmartDefiner#readme",
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "multer": "^2.1.1",
+    "pdf-parse": "^2.4.5"
+  }
+}

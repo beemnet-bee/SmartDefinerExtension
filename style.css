@@ -26,6 +26,7 @@
   border: 1px solid var(--ext-border);
   pointer-events: auto; /* Required to allow hovering over the modal */
   cursor: default;
+  user-select: none; /* STEALTH MODE: Prevent text selection */
   font-family: "JetBrains Mono", "Cascadia Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   line-height: 1.6;
   transition: opacity 0.2s ease, transform 0.2s ease, background 0.3s ease, border-color 0.3s ease;
@@ -57,6 +58,12 @@
   font-weight: 700;
   margin-right: 6px;
   letter-spacing: -0.02em;
+}
+
+@media (display-mode: browser-screenshot) {
+  #ext-definition-tooltip {
+    display: none !important;
+  }
 }
 
 #ext-definition-tooltip .def-container {
